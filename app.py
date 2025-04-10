@@ -4,11 +4,23 @@ from tensorflow.keras.preprocessing import image
 import numpy as np
 from PIL import Image
 import json
+import gdown
+import os
+
+# Configure Google Drive model link
+MODEL_URL = "https://drive.google.com/uc?id=13gVDE1x9Pd3PKXcXEiU4w8tl1Ej7ArzQ"
+MODEL_PATH = "pneumonia_detection.h5"
 
 # Load the model and class indices
 @st.cache_resource
 def load_pneumonia_model():
-    model = load_model('pneumonia_detection.h5')
+    # Download model if not exists
+    if not os.path.exists(MODEL_PATH):
+        with st.spinner("Downloading model from Google Drive..."):
+            gdown.download(MODEL_URL, MODEL_PATH, quiet=False)
+    
+    # Load model and class indices
+    model = load_model(MODEL_PATH)
     with open('class_indices.json', 'r') as f:
         class_indices = json.load(f)
     return model, class_indices
@@ -40,17 +52,21 @@ if uploaded_file is not None:
         with col2:
             st.subheader("Analysis")
             
+            # Preprocess image
             img = img.resize((224, 224))
             img_array = image.img_to_array(img)
             
+            # Ensure 3 channels
             if img_array.shape[-1] != 3:
                 img_array = np.stack((img_array.squeeze(),)*3, axis=-1)
             
             img_array = np.expand_dims(img_array, axis=0) / 255.0
             
+            # Predict
             prediction = model.predict(img_array)
             prob = prediction[0][0]
             
+            # Display results
             if prob > 0.5:
                 st.error(f"Pneumonia detected (confidence: {prob:.2%})")
             else:
