@@ -1,4 +1,4 @@
-requests==2.31.0
+requests==2.32.3
 absl-py==2.2.2
 altair==5.5.0
 astunparse==1.6.3
