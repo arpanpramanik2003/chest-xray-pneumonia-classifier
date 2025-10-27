@@ -1,56 +1,139 @@
-# Pneumonia Detection from Chest X-rays  
+# Chest X-ray Pneumonia Classifier
 
-## 🚀 Overview  
-A deep learning system that accurately classifies chest X-ray images as **Normal** or **Pneumonia** using convolutional neural networks. The system demonstrates hospital-grade accuracy in detecting bacterial and viral pneumonia patterns from radiographic images.  
+A production-quality deep learning project to detect Pneumonia from chest X-ray images, with a ready-to-use Streamlit web app and reproducible Jupyter notebooks for training, evaluation, and explainability.
 
-## 💻 Technical Stack  
-- **Deep Learning Framework**: TensorFlow 2.12 + Keras  
-- **Base Model**: Custom CNN with Transfer Learning (VGG16 backbone)  
-- **Interface**: Streamlit web application  
-- **Image Processing**: OpenCV + Pillow  
-- **Data Source**: Kaggle Chest X-Ray Images (Pneumonia) dataset  
+## Overview
+This project builds a binary image classifier that labels chest radiographs as NORMAL or PNEUMONIA. It leverages transfer learning on a curated chest X-ray dataset, includes Grad-CAM visualizations for interpretability, and provides a streamlined user interface for rapid triage and educational demonstrations.
 
-## 📈 Performance Metrics  
-| Metric        | Validation | Test Set |
-|---------------|------------|----------|
-| Accuracy      | 96.2%      | 95.4%    |
-| Precision     | 96.8%      | 96.1%    |
-| Recall        | 95.5%      | 95.8%    |
-| F1-Score      | 96.1%      | 95.9%    |
-| AUC-ROC       | 0.993      | 0.991    |
+## Key Features
+- Streamlit web app for quick, interactive inference
+- Transfer learning–based CNN with fine-tuning for strong generalization
+- Grad-CAM heatmaps to visualize model attention
+- Reproducible notebooks for training, evaluation, and ablations
+- Clean project structure and pinned dependencies
 
-## ✨ Key Features  
-- **Clinical-Grade Accuracy**: >95% test accuracy comparable to radiologists  
-- **Real-Time Analysis**: Processes X-rays in <2 seconds  
-- **Explainable AI**: Integrated Grad-CAM heatmaps for visual interpretation  
-- **Responsive Design**: Mobile-friendly interface for point-of-care use  
-- **Confidence Scoring**: Detailed probability outputs (0-100%)  
-- **Multi-Format Support**: Accepts JPG/PNG/DICOM images  
+## Performance Metrics
+- Overall accuracy: ~95% on held-out test set
+- Precision/Recall/F1 per class (reported in notebooks)
+- Confusion matrix, ROC-AUC, PR curves and loss/accuracy curves provided
+- Note: Metrics vary by split, seed, augmentation, and preprocessing
 
-## ⚠️ Important Notes  
-- Not intended as primary diagnostic tool - always consult physicians  
-- Performance may vary with unconventional X-ray machines  
-- Model trained on pediatric cases (1-5 years age group)  
+## Demo
+- Live demo: https://chest-xray-pneumonia-classifier-arpan.streamlit.app/
+- Screenshot/GIFs optional: add to a docs/ folder and reference here
 
-## 📜 License  
-MIT License  
+## Technical Stack
+- Language: Python 3.9–3.11
+- Core DL: TensorFlow/Keras or PyTorch (per notebook implementation)
+- Serving/UI: Streamlit
+- Metrics/Model utils: scikit-learn, NumPy, Pandas
+- Visualization: Matplotlib, Seaborn (optionally Plotly)
+- Imaging: Pillow, OpenCV
 
-Copyright (c) 2023 [Arpan Pramanik]  
+## Dataset
+- Source: Chest X-Ray Images (Pneumonia) dataset (Kermany et al., 2018; Kaggle)
+- Classes: NORMAL, PNEUMONIA
+- Modalities: AP/PA chest radiographs (grayscale)
+- Licensing: Refer to the dataset’s original license and usage terms
 
-Permission is hereby granted, free of charge, to any person obtaining a copy  
-of this software and associated documentation files (the "Software"), to deal  
-in the Software without restriction, including without limitation the rights  
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell  
-copies of the Software, and to permit persons to whom the Software is  
-furnished to do so, subject to the following conditions:  
+Data is not included in this repository. After download, organize locally as:
 
-The above copyright notice and this permission notice shall be included in all  
-copies or substantial portions of the Software.  
+```
+data/
+  train/
+    NORMAL/
+    PNEUMONIA/
+  val/
+    NORMAL/
+    PNEUMONIA/
+  test/
+    NORMAL/
+    PNEUMONIA/
+```
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR  
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,  
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE  
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER  
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,  
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE  
-SOFTWARE.
+## Project Structure
+```
+.
+├── app.py                        # Streamlit app
+├── diagnosis-of-pneumonia.ipynb  # Training/evaluation notebook (v1)
+├── diagnosis-of-pneumonia-v2.ipynb # Training/evaluation notebook (v2)
+├── requirements.txt              # Dependency pins
+├── README.md                     # Project documentation
+└── data/                         # Not tracked; see Dataset section
+```
+
+## Installation
+1) Clone the repo
+```
+git clone https://github.com/arpanpramanik2003/chest-xray-pneumonia-classifier.git
+cd chest-xray-pneumonia-classifier
+```
+
+2) Create a virtual environment
+```
+# Conda (recommended)
+conda create -n cxr-pneumo python=3.10 -y
+conda activate cxr-pneumo
+
+# Or venv
+python -m venv .venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
+```
+
+3) Install dependencies
+```
+pip install -r requirements.txt
+```
+
+## Usage
+### A) Run the Streamlit app locally
+```
+streamlit run app.py
+```
+Then open the local URL shown in the terminal:
+- Upload a chest X-ray image (JPG/PNG)
+- View predicted label with probability
+- Optionally view Grad-CAM visualization (if enabled)
+
+### B) Train/evaluate with notebooks
+Open and run:
+- diagnosis-of-pneumonia.ipynb
+- diagnosis-of-pneumonia-v2.ipynb
+
+Typical steps include:
+- Data loading, resizing, normalization, augmentation
+- Model definition (transfer learning), optimizer/loss setup
+- Training with early stopping/checkpointing
+- Evaluation: metrics, confusion matrix, ROC/PR
+- Explainability: Grad-CAM
+
+Update dataset paths in the first cells to match your local data directory.
+
+## Requirements
+See requirements.txt for exact versions. Core packages include:
+- streamlit
+- tensorflow/keras or torch/torchvision
+- scikit-learn
+- numpy, pandas
+- pillow, opencv-python
+- matplotlib, seaborn
+
+## Contributing
+Contributions are welcome!
+- File an issue to discuss proposals or bugs
+- Use feature branches and descriptive commit messages
+- Include benchmarks, screenshots, and reproduction steps when relevant
+
+## Important Notes
+- Not a medical device; for research and education only
+- Do not use as the sole basis for clinical decisions
+- Performance may vary across institutions, devices, and populations
+- Ensure patient privacy and compliance with relevant regulations
+
+## License
+This project is released under the MIT License. See the repository’s MIT license section for details.
+
+## Contact
+- Author: Arpan Pramanik
+- Demo: https://chest-xray-pneumonia-classifier-arpan.streamlit.app/
+- Issues: https://github.com/arpanpramanik2003/chest-xray-pneumonia-classifier/issues
